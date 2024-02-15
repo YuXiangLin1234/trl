@@ -1044,7 +1044,7 @@ class DPOTrainer(Trainer):
 
         print("losses", losses)
         print("chosen_rewards", chosen_rewards)
-        losses = losses + chosen_rewards
+        losses = losses - chosen_rewards
         # exit()
         # self.tokenizer(batch["prompt"] + batch["chosen"])
         # sft_loss = self.model(input_ids=)
