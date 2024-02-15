@@ -1041,6 +1041,16 @@ class DPOTrainer(Trainer):
             reference_chosen_logps,
             reference_rejected_logps,
         )
+
+        print(losses.shape)
+        print(chosen_rewards.shape)
+        losses = losses + chosen_rewards
+        # exit()
+        # self.tokenizer(batch["prompt"] + batch["chosen"])
+        # sft_loss = self.model(input_ids=)
+        # print(losses.shape)
+        # print(sft_loss.shape)
+        # exit()
         reward_accuracies = (chosen_rewards > rejected_rewards).float()
 
         prefix = "eval_" if train_eval == "eval" else ""
