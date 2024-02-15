@@ -1042,8 +1042,8 @@ class DPOTrainer(Trainer):
             reference_rejected_logps,
         )
 
-        print(losses.shape)
-        print(chosen_rewards.shape)
+        print("losses", losses)
+        print("chosen_rewards", chosen_rewards)
         losses = losses + chosen_rewards
         # exit()
         # self.tokenizer(batch["prompt"] + batch["chosen"])
