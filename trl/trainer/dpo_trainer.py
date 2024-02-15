@@ -866,10 +866,13 @@ class DPOTrainer(Trainer):
         # The beta is a temperature parameter for the DPO loss, typically something in the range of 0.1 to 0.5.
         # We ignore the reference model as beta -> 0. The label_smoothing parameter encodes our uncertainty about the labels and
         # calculates a conservative DPO loss.
+        # TODO
         if self.loss_type == "sigmoid":
             losses = (
                 -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
                 - F.logsigmoid(-self.beta * logits) * self.label_smoothing
+                # TODO I add
+                + policy_chosen_logps
             )
         elif self.loss_type == "hinge":
             losses = torch.relu(1 - self.beta * logits)
@@ -1042,15 +1045,10 @@ class DPOTrainer(Trainer):
             reference_rejected_logps,
         )
 
-        print("losses", losses)
-        print("chosen_rewards", chosen_rewards)
-        losses = losses - chosen_rewards
-        # exit()
-        # self.tokenizer(batch["prompt"] + batch["chosen"])
-        # sft_loss = self.model(input_ids=)
-        # print(losses.shape)
-        # print(sft_loss.shape)
-        # exit()
+        # chosen rewards are detached, so no use here
+        # print("losses", losses)
+        # print("chosen_rewards", chosen_rewards)
+        # losses = losses - chosen_rewards
         reward_accuracies = (chosen_rewards > rejected_rewards).float()
 
         prefix = "eval_" if train_eval == "eval" else ""
