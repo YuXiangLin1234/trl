@@ -869,10 +869,10 @@ class DPOTrainer(Trainer):
         # TODO
         if self.loss_type == "sigmoid":
             losses = (
-                -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
-                - F.logsigmoid(-self.beta * logits) * self.label_smoothing
+                # -F.logsigmoid(self.beta * logits) * (1 - self.label_smoothing)
+                # - F.logsigmoid(-self.beta * logits) * self.label_smoothing
                 # TODO I add
-                + policy_chosen_logps
+                - F.logsigmoid(self.beta * policy_chosen_logps)
             )
         elif self.loss_type == "hinge":
             losses = torch.relu(1 - self.beta * logits)
